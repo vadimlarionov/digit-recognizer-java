@@ -16,7 +16,7 @@ Usage:
 java -jar digit-recognizer.jar
 ```
 
-For more information about this competition see https://www.kaggle.com/c/digit-recognizer/data
+For more information about this competition see https://www.kaggle.com/c/digit-recognizer
 
 [test]: https://www.kaggle.com/c/digit-recognizer/download/test.csv
 [train]: https://www.kaggle.com/c/digit-recognizer/download/train.csv
