@@ -29,7 +29,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>ru.teamchess.server.Main</mainClass>
+                            <mainClass>com.larionov.digitrecognizer.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>

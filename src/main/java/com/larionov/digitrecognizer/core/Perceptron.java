@@ -27,7 +27,7 @@ public class Perceptron {
         neurons[classNumber].updateWeights(inputs, learningRate, delta);
     }
 
-    public int evaluate(double[] inputs) {
+    public int recognize(double[] inputs) {
         return Utils.getIndexMaxElement(activate(inputs));
     }
 }

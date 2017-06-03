@@ -37,7 +37,7 @@ public class Main {
             int label = 1;
             int value;
             for (TestDataset dataset : testDatasets) {
-                value = perceptron.evaluate(dataset.getInputs());
+                value = perceptron.recognize(dataset.getInputs());
                 printWriter.write(String.format("%d,%d\n", label, value));
                 ++label;
             }

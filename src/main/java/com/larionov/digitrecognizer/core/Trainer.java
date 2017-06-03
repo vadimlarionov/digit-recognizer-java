@@ -33,7 +33,7 @@ public class Trainer {
         for (TrainDataset dataset : datasets) {
             double[] activationResult = perceptron.activate(dataset.getInputs());
 
-            int actualDigit = perceptron.evaluate(dataset.getInputs());
+            int actualDigit = perceptron.recognize(dataset.getInputs());
             if (actualDigit == dataset.getDigit()) {
                 rightRecognized++;
             }
@@ -50,7 +50,7 @@ public class Trainer {
                 perceptron.updateWeights(dataset.getInputs(), i, delta, learningRate);
             }
         }
-        System.out.printf("Right recognized %f\n" + ((float) rightRecognized) / (float) datasets.size());
+        System.out.printf("Right recognized %f\n", ((float) rightRecognized) / (float) datasets.size());
         return Math.sqrt(error / (float) datasets.size());
     }
 }
