@@ -2,7 +2,6 @@ package com.larionov.digitrecognizer.core;
 
 import java.util.List;
 
-import com.larionov.digitrecognizer.Utils;
 import com.larionov.digitrecognizer.dataset.TrainDataset;
 
 public class Trainer {
@@ -16,37 +15,42 @@ public class Trainer {
         this.learningRate = learningRate;
     }
 
-    public void train(List<TrainDataset> trainDatasets, int epochs) {
-        for (int epoch = 0; epoch < epochs; ++epoch) {
-            int rightRecognized = trainEpoch(trainDatasets);
-            double percent = (double) rightRecognized / (double) trainDatasets.size() * 100.;
-            String message = String.format("Epoch %d; right recognized %.2f", epoch, percent) + "%";
+    public void train(List<TrainDataset> trainDatasets, int maxEpochs, double minRmse) {
+        double rmse = minRmse + 1;
+        for (int epoch = 0; epoch < maxEpochs && rmse > minRmse; ++epoch) {
+            rmse = trainEpoch(trainDatasets);
+            String message = String.format("Epoch %d; RMSE = %.7f", epoch, rmse);
             System.out.println(message);
         }
     }
 
     /**
-     * @return Процент верно распознанных цифр
+     * @return RMSE
      */
-    private int trainEpoch(List<TrainDataset> datasets) {
-        int successCounter = 0;
+    private double trainEpoch(List<TrainDataset> datasets) {
+        double error = 0;
+        int rightRecognized = 0;
         for (TrainDataset dataset : datasets) {
             double[] activationResult = perceptron.activate(dataset.getInputs());
-            if (Utils.getIndexMaxElement(activationResult) == dataset.getDigit()) {
-                ++successCounter;
+
+            int actualDigit = perceptron.evaluate(dataset.getInputs());
+            if (actualDigit == dataset.getDigit()) {
+                rightRecognized++;
             }
 
             double delta;
             for (int i = 0; i < activationResult.length; ++i) {
                 if (i != dataset.getDigit()) {
-                    delta = 0. - activationResult[i];
+                    delta = 0.0 - activationResult[i];
                 } else {
-                    delta = 1. - activationResult[i];
+                    delta = 1.0 - activationResult[i];
                 }
+                error += delta * delta;
+
                 perceptron.updateWeights(dataset.getInputs(), i, delta, learningRate);
             }
         }
-
-        return successCounter;
+        System.out.printf("Right recognized %f\n" + ((float) rightRecognized) / (float) datasets.size());
+        return Math.sqrt(error / (float) datasets.size());
     }
 }

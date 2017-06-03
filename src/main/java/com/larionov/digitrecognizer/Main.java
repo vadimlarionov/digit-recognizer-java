@@ -10,23 +10,25 @@ import com.larionov.digitrecognizer.core.Trainer;
 import com.larionov.digitrecognizer.dataset.TestDataset;
 import com.larionov.digitrecognizer.dataset.TrainDataset;
 
-@SuppressWarnings("ConstantConditions")
 public class Main {
 
-    private static final String TRAIN_FILE = "/home/vadim/go/src/github.com/Larionov-Vadim/digit-recognition/train.csv";
+    private static final String TRAIN_FILE = "train.csv";
 
-    private static final String TEST_FILE = "/home/vadim/go/src/github.com/Larionov-Vadim/digit-recognition/test.csv";
+    private static final String TEST_FILE = "test.csv";
 
     public static void main(String[] args) throws IOException {
-        double learningRate = 0.1;
-        boolean withNormalization = false;
+        int numberOfInputs = 28 * 28;
+        int maxEpochs = 25;
+        double minRmse = 0.1;
+        double learningRate = 0.01;
+        boolean withNormalization = true;
 
         Reader reader = new Reader();
         List<TrainDataset> datasets = reader.readTrainDataset(TRAIN_FILE, -1,true, withNormalization);
 
-        Perceptron perceptron = new Perceptron(28 * 28);
+        Perceptron perceptron = new Perceptron(numberOfInputs);
         Trainer trainer = new Trainer(perceptron, learningRate);
-        trainer.train(datasets, 100);
+        trainer.train(datasets, maxEpochs, minRmse);
 
         // Output
         List<TestDataset> testDatasets = reader.readTestDataset(TEST_FILE, -1, true, withNormalization);
